@@ -1,4 +1,4 @@
-from .parser import parse
+from .parser import parse, Leaf, Branch
 
 
 class Lang:
@@ -11,10 +11,10 @@ class Lang:
         return self._eval_parsed(parsed)
 
     def _eval_parsed(self, parsed):
-        for branch in parsed:
-            name, content = branch
+        for item in parsed:
+            name, content = item
 
-            if isinstance(content, str):
+            if isinstance(item, Leaf):
                 if name in self.leaves:
                     f = self.leaves[name]
                     value = eval(content)
@@ -22,7 +22,7 @@ class Lang:
                 else:
                     raise Exception('Undefined leaf {}'.format(name))
 
-            elif isinstance(content, list):
+            elif isinstance(item, Branch):
                 if name in self.branches:
                     f = self.branches[name]
                     branches = self._eval_parsed(content)

@@ -1,15 +1,12 @@
 from __future__ import print_function
 import sys
 import logging
+from collections import namedtuple
 import tokenize as tkn
 from io import BytesIO
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
-
-
-class ParserError(Exception):
-    'Error in parsing'
 
 
 def to_tokens(code):
@@ -70,18 +67,22 @@ def make_blocks(lines):
                 yield line
 
 
+Leaf = namedtuple('Leaf', ['name', 'content'])
+Branch = namedtuple('Branch', ['name', 'content'])
+
+
 def join_blocks(blocks):
     for i, block in enumerate(blocks):
         if ':' in block:
             colon_index = block.index(':')
 
-            head = ' '.join(block[:colon_index])
+            name = ' '.join(block[:colon_index])
             leaf = ' '.join(block[colon_index+1:])
 
             if leaf:
-                yield [head, leaf]
+                yield Leaf(name, leaf)
             else:
-                yield [head, list(join_blocks(blocks[i+1]))]
+                yield Branch(name, list(join_blocks(blocks[i+1])))
 
 
 def parse(code):

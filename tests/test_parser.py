@@ -1,4 +1,5 @@
 import rami.parser
+from rami.parser import Leaf, Branch
 
 code = '''
 a:
@@ -11,6 +12,6 @@ d:
 
 def test_parser():
     tree = rami.parser.parse(code)
-    assert tree == [['a', [['b', '1'],
-                           ['c', '2']]],
-                    ['d', [['e', '3']]]]
+    assert tree == [Branch('a', [Leaf('b', '1'),
+                                 Leaf('c', '2')]),
+                    Branch('d', [Leaf('e', '3')])]
