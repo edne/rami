@@ -1,4 +1,4 @@
-import parser
+import rami.parser
 
 code = '''
 a:
@@ -10,7 +10,7 @@ d:
 
 
 def test_parser():
-    tree = parser.parse(code)
+    tree = rami.parser.parse(code)
     assert tree == [['a', [['b', '1'],
                            ['c', '2']]],
                     ['d', [['e', '3']]]]

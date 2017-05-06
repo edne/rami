@@ -1,4 +1,4 @@
-from lang import Lang
+from rami.lang import Lang
 
 
 lang = Lang()
